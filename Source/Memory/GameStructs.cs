@@ -6,14 +6,14 @@ using SLAPI.Utils;
 namespace SLAPI.Memory;
 
 [StructLayout(LayoutKind.Sequential)]
-public struct TSounds
+internal struct TSounds
 {
     public uint Name;
     public uint MetadataRef;
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct TSoundsRaw
+internal unsafe struct TSoundsRaw
 {
     private fixed ulong Sounds[1000];
 
@@ -40,7 +40,7 @@ public unsafe struct TSoundsRaw
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1)]
-public struct SoundSet
+internal struct SoundSet
 {
     [FieldOffset(0)] public byte Class; // 1
     [FieldOffset(1)] public uint Flags; // 4
@@ -84,7 +84,7 @@ public struct SoundSet
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct audSoundSet
+internal unsafe struct audSoundSet
 {
     public SoundSet* Data;
     public uint NameHash;
@@ -108,4 +108,12 @@ public unsafe struct audSoundSet
         for (var i = 0; i < Data->SoundCount; i++)
             $"  #{i} {Data->Sounds[i].MetadataRef:X} ({Data->Sounds[i].Name:X})".ToLog();
     }
+}
+
+public enum SirenState
+{
+    OFF = 0,
+    SLOW = 1,
+    FAST = 2,
+    WARNING = 3
 }

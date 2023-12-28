@@ -7,7 +7,7 @@ public static class Main
 {
     internal static bool HasInitialized;
 
-    public static bool Init()
+    public static bool Initialize()
     {
         // Avoids initializing multiple times
         if (HasInitialized) return true;
@@ -23,9 +23,5 @@ public static class Main
         return true;
     }
 
-    public static void Terminate()
-    {
-        SLInstance.ResetAll();
-        Manager.Cleanup();
-    }
+    public static void Terminate() => Manager.Cleanup();
 }

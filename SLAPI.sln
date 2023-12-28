@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLAPI", "Source\SLAPI.csproj", "{3185E465-AA62-40AE-9A33-40712AD1686F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIExample", "APIExample\APIExample.csproj", "{D06BC71B-4CF5-41C7-8616-184043711461}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{3185E465-AA62-40AE-9A33-40712AD1686F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3185E465-AA62-40AE-9A33-40712AD1686F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3185E465-AA62-40AE-9A33-40712AD1686F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D06BC71B-4CF5-41C7-8616-184043711461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06BC71B-4CF5-41C7-8616-184043711461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D06BC71B-4CF5-41C7-8616-184043711461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06BC71B-4CF5-41C7-8616-184043711461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
