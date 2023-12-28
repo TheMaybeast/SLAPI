@@ -110,7 +110,7 @@ internal unsafe struct audSoundSet
     }
 }
 
-public enum SirenState
+public enum eSirenState
 {
     OFF = 0,
     SLOW = 1,

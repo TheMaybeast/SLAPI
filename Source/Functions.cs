@@ -8,15 +8,15 @@ namespace SLAPI;
 
 public static class Functions
 {
-    public static SirenState GetSirenState(Vehicle vehicle)
+    public static eSirenState GetSirenState(Vehicle vehicle)
     {
         if (!AssertSafe(vehicle)) return 0;
 
-        return (SirenState)Marshal.ReadInt32(vehicle.GetAudVehicleAudioEntityPtr() +
-                                      GameOffsets.audVehicleAudioEntity_SirenStateOffset);
+        return (eSirenState)Marshal.ReadInt32(vehicle.GetAudVehicleAudioEntityPtr() +
+                                              GameOffsets.audVehicleAudioEntity_SirenStateOffset);
     }
 
-    public static void SetSirenState(Vehicle vehicle, SirenState state)
+    public static void SetSirenState(Vehicle vehicle, eSirenState state)
     {
         if (!AssertSafe(vehicle)) return;
 
