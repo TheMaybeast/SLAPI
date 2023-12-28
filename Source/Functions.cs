@@ -81,6 +81,13 @@ public static class Functions
         ptr->Data = soundSet.SoundSet;
         ptr->NameHash = soundSet.NameHash;
     }
+    public static void SetVehicleSoundSet(Vehicle vehicle, uint soundSetNameHash)
+    {
+        var soundSet = GetSoundSet(soundSetNameHash);
+        SetVehicleSoundSet(vehicle, soundSet);
+    }
+    public static void SetVehicleSoundSet(Vehicle vehicle, string soundSetName) =>
+        SetVehicleSoundSet(vehicle, Game.GetHashKey(soundSetName));
 
     public static unsafe SoundSetWrapper GetVehicleSoundSet(Vehicle vehicle)
     {
