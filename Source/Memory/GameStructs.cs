@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using Rage;
 using SLAPI.Utils;
 
@@ -71,6 +72,15 @@ public struct SoundSet
         }
     }
     public void SetSound(string scriptName, uint metadataRef) => SetSound(Game.GetHashKey(scriptName), metadataRef);
+
+    public unsafe void Copy(SoundSet* source)
+    {
+        fixed (SoundSet* self = &this)
+        {
+            var size = Marshal.SizeOf(this);
+            Buffer.MemoryCopy(source, self, size, size);
+        }
+    }
 }
 
 [StructLayout(LayoutKind.Sequential)]

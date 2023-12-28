@@ -9,11 +9,11 @@ public static class VehicleExtensions
 {
     public static SLInstance GetSLInstance(this Vehicle veh)
     {
-        if (SLInstance.SLInstances.TryGetValue(veh, out var instance))
+        if (SLInstance.SLInstances.TryGetValue(veh.MemoryAddress, out var instance))
             return instance;
 
         var temp = new SLInstance(veh);
-        SLInstance.SLInstances.Add(veh, temp);
+        SLInstance.SLInstances.Add(veh.MemoryAddress, temp);
         return temp;
     }
 

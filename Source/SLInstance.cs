@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Rage;
 using SLAPI.Memory;
@@ -17,9 +18,10 @@ public enum SirenState
 
 public unsafe class SLInstance
 {
-    internal static Dictionary<Vehicle, SLInstance> SLInstances = new();
+    internal static Dictionary<IntPtr, SLInstance> SLInstances = new();
 
     private readonly Vehicle _vehicle;
+    private readonly IntPtr _vehiclePtr;
 
     private readonly IntPtr _audVehicleAudioEntityPtr;
     public readonly audSoundSet* audSoundSet;
@@ -32,6 +34,7 @@ public unsafe class SLInstance
 
         // Saves vehicle and relevant memory addresses
         _vehicle = veh;
+        _vehiclePtr = veh.MemoryAddress;
         _audVehicleAudioEntityPtr = veh.GetAudVehicleAudioEntityPtr();
         audSoundSet = veh.GetSirenSoundSetPtr();
 
@@ -59,5 +62,20 @@ public unsafe class SLInstance
     public uint SequentialSirenPresses => (uint)Marshal.ReadInt32(_vehicle.MemoryAddress + GameOffsets.CVehicle_SequentialSirenPressesOffset);
     public bool IsHornOn => _vehicle.IsHornOn();
 
-    public void Reset() => audSoundSet->Init(_defaultAudSoundSetNameHash);
+    public void Reset()
+    {
+#if DEBUG
+        $"Attempting to reset vehicle {_vehiclePtr}".ToLog();
+#endif
+        if (!_vehicle)
+        {
+            $"  Vehicle {_vehiclePtr} does not exist, removing from pool.".ToLog();
+            SLInstances.Remove(_vehiclePtr);
+        }
+        audSoundSet->Init(_defaultAudSoundSetNameHash);
+#if DEBUG
+        $"Reset vehicle {_vehiclePtr}".ToLog();
+#endif
+    }
+    public static void ResetAll() => SLInstances.Values.ToList().ForEach(x => x.Reset());
 }

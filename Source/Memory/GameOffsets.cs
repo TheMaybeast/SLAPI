@@ -16,6 +16,10 @@ internal static class GameOffsets
 
     public static bool Init()
     {
+#if DEBUG
+        "Memory Offsets:".ToLog();
+#endif
+
         var address = Game.FindPattern("48 8B 8B ?? ?? 00 00 E8 ?? ?? ?? ?? 48 8B 8B 70 13 00 00");
         if (AssertAddress(address, nameof(CVehicle_AudVehicleAudioEntity)))
         {
@@ -58,7 +62,13 @@ internal static class GameOffsets
     private static bool _anyAssertFailed;
     private static bool AssertAddress(IntPtr address, string name)
     {
-        if (address != IntPtr.Zero) return true;
+        if (address != IntPtr.Zero)
+        {
+#if DEBUG
+            $"  {name}: {address}".ToLog();
+#endif
+            return true;
+        }
 
         $"ERROR: Incompatible game version, couldn't find {name} instance.".ToLog();
         _anyAssertFailed = true;

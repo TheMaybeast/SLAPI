@@ -3,9 +3,9 @@ using SLAPI.Utils;
 
 namespace SLAPI;
 
-internal static class Main
+public static class Main
 {
-    public static bool HasInitialized;
+    internal static bool HasInitialized;
 
     public static bool Init()
     {
@@ -21,5 +21,11 @@ internal static class Main
 
         HasInitialized = true;
         return true;
+    }
+
+    public static void Terminate()
+    {
+        SLInstance.ResetAll();
+        Manager.Cleanup();
     }
 }

@@ -15,6 +15,10 @@ internal static unsafe class GameFunctions
 
     public static bool Init()
     {
+#if DEBUG
+        "Memory Functions:".ToLog();
+#endif
+
         var address = Game.FindPattern("40 53 48 83 EC 20 48 8B D9 89 51 08");
         if (AssertAddress(address, nameof(InitAudSoundSet)))
         {
@@ -30,10 +34,16 @@ internal static unsafe class GameFunctions
         return !_anyAssertFailed;
     }
 
-    private static bool _anyAssertFailed = false;
+    private static bool _anyAssertFailed;
     private static bool AssertAddress(IntPtr address, string name)
     {
-        if (address != IntPtr.Zero) return true;
+        if (address != IntPtr.Zero)
+        {
+#if DEBUG
+            $"  {name}: {address}".ToLog();
+#endif
+            return true;
+        }
 
         $"ERROR: Incompatible game version, couldn't find {name} instance.".ToLog();
         _anyAssertFailed = true;
