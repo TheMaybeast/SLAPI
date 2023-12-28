@@ -25,10 +25,10 @@ public class EntryPoint
             var sirenState = Functions.GetSirenState(veh);
             var sirenString = sirenState switch
             {
-                SirenState.OFF => "~r~Off",
-                SirenState.SLOW => "~g~Slow",
-                SirenState.FAST => "~g~Fast",
-                SirenState.WARNING => "~g~Warning",
+                eSirenState.OFF => "~r~Off",
+                eSirenState.SLOW => "~g~Slow",
+                eSirenState.FAST => "~g~Fast",
+                eSirenState.WARNING => "~g~Warning",
                 _ => "~r~Off",
             };
 
@@ -41,6 +41,18 @@ public class EntryPoint
     private static void OnUnload(bool isTerminating) => SLAPI.Main.Terminate();
 
     [ConsoleCommand]
-    public static void InitSirenSoundSet(string soundSetName) =>
+    public static void SetVehicleSoundSet(string soundSetName) =>
         Functions.SetVehicleSoundSet(Game.LocalPlayer.Character.CurrentVehicle, soundSetName);
+
+    [ConsoleCommand]
+    public static void DumpVehicleSoundSet() =>
+        Functions.GetVehicleSoundSet(Game.LocalPlayer.Character.CurrentVehicle).DumpToLog(true);
+
+    [ConsoleCommand]
+    public static void GetSound(string scriptName) => Game.Console.Print(
+        $"Sound {scriptName}: {Functions.GetVehicleSoundSet(Game.LocalPlayer.Character.CurrentVehicle).GetSound(scriptName)}");
+
+    [ConsoleCommand]
+    public static void SetSound(string scriptName, uint metadataRef) => Functions
+        .GetVehicleSoundSet(Game.LocalPlayer.Character.CurrentVehicle).SetSound(scriptName, metadataRef);
 }

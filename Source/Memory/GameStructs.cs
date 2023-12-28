@@ -47,32 +47,6 @@ internal struct SoundSet
     [FieldOffset(5)] public uint SoundCount; // 4
     [FieldOffset(9)] public TSoundsRaw Sounds; // 8000
 
-    public TSounds GetSound(uint scriptNameHash)
-    {
-        for (var i = 0; i < SoundCount; i++)
-        {
-            if (Sounds[i].Name == scriptNameHash)
-                return Sounds[i];
-        }
-
-        return new TSounds();
-    }
-    public TSounds GetSound(string scriptName) => GetSound(Game.GetHashKey(scriptName));
-
-    public void SetSound(uint scriptNameHash, uint metadataRef)
-    {
-        for (var i = 0; i < SoundCount; i++)
-        {
-            if (Sounds[i].Name == scriptNameHash)
-                Sounds[i] = new TSounds()
-                {
-                    Name = scriptNameHash,
-                    MetadataRef = metadataRef
-                };
-        }
-    }
-    public void SetSound(string scriptName, uint metadataRef) => SetSound(Game.GetHashKey(scriptName), metadataRef);
-
     public unsafe void Copy(SoundSet* source)
     {
         fixed (SoundSet* self = &this)
@@ -97,17 +71,6 @@ internal unsafe struct audSoundSet
         }
     }
     public void Init(string soundSetName) => Init(Game.GetHashKey(soundSetName));
-
-    public void DumpToLog()
-    {
-        $"SoundSet: {NameHash}".ToLog();
-        $"  Class: {Data->Class}".ToLog();
-        $"  Flags: {Data->Flags:X}".ToLog();
-        $"  SoundCount: {Data->SoundCount}".ToLog();
-
-        for (var i = 0; i < Data->SoundCount; i++)
-            $"  #{i} {Data->Sounds[i].MetadataRef:X} ({Data->Sounds[i].Name:X})".ToLog();
-    }
 }
 
 public enum eSirenState
