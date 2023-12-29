@@ -19,13 +19,13 @@ internal static unsafe class GameFunctions
         "Memory Functions:".ToLog();
 #endif
 
-        var address = Game.FindPattern("40 53 48 83 EC 20 48 8B D9 89 51 08");
+        var address = Game.FindPattern("E8 ?? ?? ?? ?? 4C 39 6D E0");
         if (AssertAddress(address, nameof(InitAudSoundSet)))
         {
             InitAudSoundSet = Marshal.GetDelegateForFunctionPointer<InitAudSoundSetDelegate>(address);
         }
 
-        address = Game.FindPattern("48 8B 89 98 09 00 00 48 85 C9 0F");
+        address = Game.FindPattern("48 8B 89 ?? 09 00 00 48 85 C9 0F 85");
         if (AssertAddress(address, nameof(IsHornOn)))
         {
             IsHornOn = Marshal.GetDelegateForFunctionPointer<IsHornOnDelegate>(address);
@@ -40,7 +40,7 @@ internal static unsafe class GameFunctions
         if (address != IntPtr.Zero)
         {
 #if DEBUG
-            $"  {name}: {address}".ToLog();
+            $"  {name} @ {address}".ToLog();
 #endif
             return true;
         }

@@ -65,7 +65,7 @@ internal static class GameOffsets
         if (address != IntPtr.Zero)
         {
 #if DEBUG
-            $"  {name}: {address}".ToLog();
+            $"  {name} @ {address}".ToLog();
 #endif
             return true;
         }
