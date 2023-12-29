@@ -19,7 +19,7 @@ internal static unsafe class GameFunctions
         "Memory Functions:".ToLog();
 #endif
 
-        var address = Game.FindPattern("E8 ?? ?? ?? ?? 4C 39 6D E0");
+        var address = Game.FindPattern("40 53 48 83 EC 20 48 8B D9 89 51 08");
         if (AssertAddress(address, nameof(InitAudSoundSet)))
         {
             InitAudSoundSet = Marshal.GetDelegateForFunctionPointer<InitAudSoundSetDelegate>(address);
