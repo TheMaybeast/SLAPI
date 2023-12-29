@@ -22,6 +22,4 @@ public static class Main
         HasInitialized = true;
         return true;
     }
-
-    public static void Terminate() => Manager.Cleanup();
 }

@@ -7,7 +7,7 @@ namespace SLAPI.Memory;
 
 public static class Manager
 {
-    private static List<IntPtr> AllocatedMemory = new();
+    private static readonly List<IntPtr> AllocatedMemory = new();
 
     public static unsafe T* Allocate<T>() where T: struct
     {
@@ -24,9 +24,6 @@ public static class Manager
     public static unsafe void Destroy<T>(T* targetPtr) where T : struct
     {
         var ptr = (IntPtr)targetPtr;
-#if DEBUG
-        $"Attempting to free {typeof(T).Name} at {ptr}".ToLog();
-#endif
         if (!AllocatedMemory.Contains(ptr)) return;
         Marshal.FreeHGlobal(ptr);
         AllocatedMemory.Remove(ptr);
@@ -35,7 +32,7 @@ public static class Manager
 #endif
     }
 
-    internal static void Cleanup()
+    /*internal static void Cleanup()
     {
         foreach (var ptr in AllocatedMemory)
         {
@@ -44,5 +41,5 @@ public static class Manager
             $"Freed managed memory at {ptr}".ToLog();
 #endif
         }
-    }
+    }*/
 }

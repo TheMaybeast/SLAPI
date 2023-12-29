@@ -35,10 +35,7 @@ public class EntryPoint
             Game.DisplaySubtitle(
                 $"Horn: {hornString}\n~w~State: {sirenString}\n~w~Time: {Functions.GetSirenTime(veh)}\n~w~LT Time: {Functions.GetSirenLastChangeTime(veh)}\n~w~SoundSet: {Functions.GetVehicleSoundSet(veh).NameHash}");
         }
-
     }
-
-    private static void OnUnload(bool isTerminating) => SLAPI.Main.Terminate();
 
     [ConsoleCommand]
     public static void SetVehicleSoundSet(string soundSetName) =>
