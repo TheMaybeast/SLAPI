@@ -62,12 +62,23 @@ public static class Functions
         var audSoundSetPtr = Manager.Allocate<audSoundSet>();
         audSoundSetPtr->Init(soundSetNameHash);
 
-        var soundSetPtr = Marshal.ReadIntPtr((IntPtr)audSoundSetPtr);
+        var soundSetPtr = (SoundSet*)Marshal.ReadIntPtr((IntPtr)audSoundSetPtr);
         Manager.Destroy(audSoundSetPtr);
+
+        if ((IntPtr)soundSetPtr != IntPtr.Zero)
+            return new SoundSetWrapper
+            {
+                SoundSet = soundSetPtr,
+                NameHash = soundSetNameHash
+            };
+
+        var soundSet = new SoundSet();
+        soundSetPtr = Manager.Allocate<SoundSet>();
+        Marshal.StructureToPtr(soundSet, (IntPtr)soundSetPtr, false);
 
         return new SoundSetWrapper
         {
-            SoundSet = (SoundSet*)soundSetPtr,
+            SoundSet = soundSetPtr,
             NameHash = soundSetNameHash
         };
     }
