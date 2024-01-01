@@ -1,10 +1,10 @@
 ﻿using Rage;
 using Rage.Attributes;
-
+using Rage.Native;
 using SLAPI;
 using SLAPI.Memory;
 
-[assembly: Plugin("SLAPI Example", PrefersSingleInstance = true, ShouldTickInPauseMenu = true)]
+[assembly: Plugin("SLAPI Example", PrefersSingleInstance = true, ShouldTickInPauseMenu = false)]
 namespace APIExample;
 
 public class EntryPoint
@@ -18,7 +18,7 @@ public class EntryPoint
             GameFiber.Yield();
 
             var veh = Game.LocalPlayer.Character.CurrentVehicle;
-            if (!veh || !veh.HasSiren) continue;
+            if (!veh || veh.IsDead || !veh.HasSiren) continue;
 
             var hornString = Functions.GetHornStatus(veh) ? "~g~Enabled" : "~r~Disabled";
 
@@ -32,9 +32,16 @@ public class EntryPoint
                 _ => "~r~Off",
             };
 
-            Game.DisplaySubtitle(
+            DisplayHelp(
                 $"Horn: {hornString}\n~w~State: {sirenString}\n~w~Time: {Functions.GetSirenTime(veh)}\n~w~LT Time: {Functions.GetSirenLastChangeTime(veh)}\n~w~SoundSet: {Functions.GetVehicleSoundSet(veh).NameHash}");
         }
+    }
+
+    private static void DisplayHelp(string text)
+    {
+        NativeFunction.Natives.x8509B634FBE7DA11("STRING");
+        NativeFunction.Natives.x6C188BE134E074AA(text);
+        NativeFunction.Natives.x238FFE5C7B0498A6(0, false, false, 1);
     }
 
     [ConsoleCommand]
