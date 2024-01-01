@@ -11,7 +11,7 @@ public unsafe class SoundSetWrapper
 
     public void DumpToLog(bool toConsole = false)
     {
-        $"SoundSet: {NameHash}".ToLog(toConsole: toConsole);
+        $"SoundSet: {NameHash} ({(ulong)SoundSet:X})".ToLog(toConsole: toConsole);
         $"  Class: {SoundSet->Class}".ToLog(toConsole: toConsole);
         $"  Flags: {SoundSet->Flags:X}".ToLog(toConsole: toConsole);
         $"  SoundCount: {SoundSet->SoundCount}".ToLog(toConsole: toConsole);

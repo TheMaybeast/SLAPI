@@ -40,7 +40,7 @@ internal static unsafe class GameFunctions
         if (address != IntPtr.Zero)
         {
 #if DEBUG
-            $"  {name} @ {address}".ToLog();
+            $"  {name} @ {(ulong)address:X}".ToLog();
 #endif
             return true;
         }
