@@ -31,15 +31,4 @@ public static class Manager
         $"Freed {typeof(T).Name} at {ptr}".ToLog();
 #endif
     }
-
-    /*internal static void Cleanup()
-    {
-        foreach (var ptr in AllocatedMemory)
-        {
-            Marshal.FreeHGlobal(ptr);
-#if DEBUG
-            $"Freed managed memory at {ptr}".ToLog();
-#endif
-        }
-    }*/
 }
