@@ -11,13 +11,13 @@ public unsafe class SoundSetWrapper
 
     public void DumpToLog(bool toConsole = false)
     {
-        $"SoundSet: {NameHash}".ToLog(toConsole);
-        $"  Class: {SoundSet->Class}".ToLog(toConsole);
-        $"  Flags: {SoundSet->Flags:X}".ToLog(toConsole);
-        $"  SoundCount: {SoundSet->SoundCount}".ToLog(toConsole);
+        $"SoundSet: {NameHash}".ToLog(toConsole: toConsole);
+        $"  Class: {SoundSet->Class}".ToLog(toConsole: toConsole);
+        $"  Flags: {SoundSet->Flags:X}".ToLog(toConsole: toConsole);
+        $"  SoundCount: {SoundSet->SoundCount}".ToLog(toConsole: toConsole);
 
         for (var i = 0; i < SoundSet->SoundCount; i++)
-            $"  #{i} {SoundSet->Sounds[i].MetadataRef:X} ({SoundSet->Sounds[i].Name:X})".ToLog(toConsole);
+            $"  #{i} {SoundSet->Sounds[i].MetadataRef:X} ({SoundSet->Sounds[i].Name:X})".ToLog(toConsole: toConsole);
     }
 
     public uint GetSound(uint scriptNameHash)

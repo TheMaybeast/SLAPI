@@ -11,7 +11,7 @@ public class EntryPoint
 {
     public static void Main()
     {
-        SLAPI.Main.Initialize();
+        _ = new SLAPIMain();
 
         while (true)
         {

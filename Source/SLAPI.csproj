@@ -58,7 +58,7 @@
     <Compile Include="Functions.cs" />
     <Compile Include="Memory\Manager.cs" />
     <Compile Include="Utils\Log.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="SLAPIMain.cs" />
     <Compile Include="Memory\GameFunctions.cs" />
     <Compile Include="Memory\GameOffsets.cs" />
     <Compile Include="Memory\GameStructs.cs" />

@@ -1,40 +1,58 @@
-﻿using Rage;
-using System;
+﻿using System;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using Rage;
 
 namespace SLAPI.Utils;
 
-internal class Log
+internal enum LogLevel
 {
-    private static bool LogCreated;
-    public const string Path = @"SLAPI.log";
+    DEBUG,
+    INFO,
+    WARN,
+    ERROR,
+    FATAL
+}
 
-    public Log()
+internal static class Log
+{
+    private const string Path = "SLAPI.log";
+
+    internal static void Init()
     {
-        if (LogCreated) return;
-        var message = "SLAPI v" + Assembly.GetExecutingAssembly().GetName().Version;
+        var message = $"SLAPI v{Assembly.GetExecutingAssembly().GetName().Version}";
         message += Environment.NewLine;
         message += "-----------------------------------------------------------";
         message += Environment.NewLine;
-        using (var writer = new StreamWriter(Path, false))
-        {
-            writer.WriteLine(message);
-            writer.Close();
-        }
-        LogCreated = true;
+
+        using var writer = new StreamWriter(Path, false);
+        writer.WriteLine(message);
+        writer.Close();
+    }
+
+    public static void Write(string text, LogLevel logLevel = LogLevel.INFO, bool toConsole = false)
+    {
+        if (toConsole) Game.LogTrivial($"[{logLevel}] {text}");
+
+        using var writer = new StreamWriter(Path, true);
+        writer.WriteLine($"[{DateTime.Now.ToString(CultureInfo.InvariantCulture)}] [{logLevel}] {text}");
+        writer.Close();
+    }
+
+    internal static void Terminate()
+    {
+        if (!Directory.Exists($"Logs"))
+            Directory.CreateDirectory($"Logs");
+        if (!Directory.Exists($"Logs\\SLAPI"))
+            Directory.CreateDirectory($"Logs\\SLAPI");
+
+        File.Copy(Path, $"Logs\\SLAPI\\SLAPI_{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.log");
     }
 }
 
 internal static class LogExtensions
 {
-    internal static void ToLog(this string log, bool toConsole = false)
-    {
-        if (toConsole) Game.LogTrivial(log);
-        using var writer = new StreamWriter(Log.Path, true);
-
-        writer.WriteLine("[" + DateTime.Now.ToString(CultureInfo.InvariantCulture) + "] " + log);
-        writer.Close();
-    }
+    public static void ToLog(this string message, LogLevel logLevel = LogLevel.INFO, bool toConsole = false) =>
+        Log.Write(message, logLevel, toConsole);
 }

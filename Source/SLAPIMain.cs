@@ -3,23 +3,26 @@ using SLAPI.Utils;
 
 namespace SLAPI;
 
-public static class Main
+public class SLAPIMain
 {
-    internal static bool HasInitialized;
+    internal bool HasInitialized;
 
-    public static bool Initialize()
+    public SLAPIMain()
     {
         // Avoids initializing multiple times
-        if (HasInitialized) return true;
+        if (HasInitialized) return;
 
-        // Creates logging
-        _ = new Log();
+        Log.Init();
 
         // Processes game memory and returns false if error
         var memorySuccess = GameFunctions.Init() && GameOffsets.Init();
-        if (!memorySuccess) return false;
+        if (!memorySuccess) return;
 
         HasInitialized = true;
-        return true;
+    }
+
+    ~SLAPIMain()
+    {
+        Log.Terminate();
     }
 }
