@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Functions.cs" />
     <Compile Include="Memory\Manager.cs" />
+    <Compile Include="Memory\Patches\BlipPatch.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="SLAPIMain.cs" />
     <Compile Include="Memory\GameFunctions.cs" />

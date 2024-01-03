@@ -3,11 +3,20 @@ using SLAPI.Memory;
 using System.Runtime.InteropServices;
 using SLAPI.Utils;
 using System;
+using SLAPI.Memory.Patches;
 
 namespace SLAPI;
 
 public static class Functions
 {
+    public static bool SetSirenBlipOnFastToggle(bool status)
+    {
+        if (status == BlipPatch.Patched)
+            return true;
+
+        return status ? BlipPatch.Patch() : BlipPatch.Remove();
+    }
+
     public static eSirenState GetSirenState(Vehicle vehicle)
     {
         if (!AssertSafe(vehicle)) return 0;
