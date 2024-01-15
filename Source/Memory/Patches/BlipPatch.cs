@@ -1,6 +1,7 @@
 ﻿using Rage;
 using System;
 using System.Runtime.InteropServices;
+using SLAPI.Utils;
 
 namespace SLAPI.Memory.Patches;
 
@@ -21,13 +22,13 @@ internal static class BlipPatch
             {
                 var addr = Game.FindPattern(Pattern);
                 if (addr == IntPtr.Zero) return false;
-                Game.LogTrivial($"Got Address: {(long)addr:X}");
+                $"Got Address: {(long)addr:X}".ToLog(LogLevel.DEBUG);
                 _location = addr;
             }
 
-            Game.LogTrivial($"Previous {(long)Marshal.ReadByte(_location, Offset):X}");
+            $"Previous {(long)Marshal.ReadByte(_location, Offset):X}".ToLog(LogLevel.DEBUG);
             Marshal.WriteByte(_location, Offset, 0xFF);
-            Game.LogTrivial($"New {(long)Marshal.ReadByte(_location, Offset):X}");
+            $"New {(long)Marshal.ReadByte(_location, Offset):X}".ToLog(LogLevel.DEBUG);
             Patched = true;
             return true;
         }
@@ -41,9 +42,9 @@ internal static class BlipPatch
     {
         try
         {
-            Game.LogTrivial($"Previous {(long)Marshal.ReadByte(_location, Offset):X}");
+            $"Previous {(long)Marshal.ReadByte(_location, Offset):X}".ToLog(LogLevel.DEBUG);
             Marshal.WriteByte(_location, Offset, 0x80);
-            Game.LogTrivial($"New {(long)Marshal.ReadByte(_location, Offset):X}");
+            $"New {(long)Marshal.ReadByte(_location, Offset):X}".ToLog(LogLevel.DEBUG);
             Patched = false;
             return true;
         }

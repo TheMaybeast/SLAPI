@@ -5,12 +5,12 @@ namespace SLAPI;
 
 public class SLAPIMain
 {
-    internal bool HasInitialized;
+    private readonly bool _hasInitialized;
 
     public SLAPIMain()
     {
         // Avoids initializing multiple times
-        if (HasInitialized) return;
+        if (_hasInitialized) return;
 
         Log.Init();
 
@@ -18,7 +18,7 @@ public class SLAPIMain
         var memorySuccess = GameFunctions.Init() && GameOffsets.Init();
         if (!memorySuccess) return;
 
-        HasInitialized = true;
+        _hasInitialized = true;
     }
 
     ~SLAPIMain()
