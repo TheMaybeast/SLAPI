@@ -45,7 +45,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Functions.cs" />
     <Compile Include="Memory\Manager.cs" />
     <Compile Include="Memory\Patches\BlipPatch.cs" />
     <Compile Include="Utils\Log.cs" />

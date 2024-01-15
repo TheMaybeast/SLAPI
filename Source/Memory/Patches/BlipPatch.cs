@@ -18,22 +18,29 @@ internal static class BlipPatch
     {
         try
         {
+            "Applying Blip Patch:".ToLog();
             if (_location == IntPtr.Zero)
             {
                 var addr = Game.FindPattern(Pattern);
-                if (addr == IntPtr.Zero) return false;
-                $"Got Address: {(long)addr:X}".ToLog(LogLevel.DEBUG);
+                if (addr == IntPtr.Zero)
+                {
+                    "  Failed to apply patch: Location not found".ToLog(LogLevel.ERROR);
+                    return false;
+                }
+                $"  Located @ {(long)addr:X}".ToLog();
                 _location = addr;
             }
 
-            $"Previous {(long)Marshal.ReadByte(_location, Offset):X}".ToLog(LogLevel.DEBUG);
+            $"  Previous bytes: {(long)Marshal.ReadByte(_location, Offset):X}".ToLog();
             Marshal.WriteByte(_location, Offset, 0xFF);
-            $"New {(long)Marshal.ReadByte(_location, Offset):X}".ToLog(LogLevel.DEBUG);
+            $"  New bytes: {(long)Marshal.ReadByte(_location, Offset):X}".ToLog();
             Patched = true;
+            "  Applied patch successfully!".ToLog();
             return true;
         }
         catch
         {
+            "  Failed to apply patch: Unknown error".ToLog(LogLevel.ERROR);
             return false;
         }
     }
@@ -42,14 +49,17 @@ internal static class BlipPatch
     {
         try
         {
-            $"Previous {(long)Marshal.ReadByte(_location, Offset):X}".ToLog(LogLevel.DEBUG);
+            "Removing Blip Patch:".ToLog();
+            $"  Previous {(long)Marshal.ReadByte(_location, Offset):X}".ToLog();
             Marshal.WriteByte(_location, Offset, 0x80);
-            $"New {(long)Marshal.ReadByte(_location, Offset):X}".ToLog(LogLevel.DEBUG);
+            $"  New {(long)Marshal.ReadByte(_location, Offset):X}".ToLog();
             Patched = false;
+            "   Removed patch successfully".ToLog();
             return true;
         }
         catch
         {
+            "   Failed to remove patch: Unknown error".ToLog(LogLevel.ERROR);
             return false;
         }
     }

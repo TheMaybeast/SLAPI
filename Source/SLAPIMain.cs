@@ -1,4 +1,6 @@
-﻿using SLAPI.Memory;
+﻿using System.Reflection;
+using SLAPI.Memory;
+using SLAPI.Memory.Patches;
 using SLAPI.Utils;
 
 namespace SLAPI;
@@ -12,7 +14,7 @@ public class SLAPIMain
         // Avoids initializing multiple times
         if (_hasInitialized) return;
 
-        Log.Init();
+        $"====== Loading SLAPI v{Assembly.GetExecutingAssembly().GetName().Version} ======".ToLog();
 
         // Processes game memory and returns false if error
         var memorySuccess = GameFunctions.Init() && GameOffsets.Init();
@@ -23,6 +25,21 @@ public class SLAPIMain
 
     ~SLAPIMain()
     {
-        Log.Terminate();
+        // Resets all managed vehicles to default siren sounds
+        foreach (var slVehicle in SLVehicle.SLVehicles.Values)
+            slVehicle.SirenSounds = slVehicle.DefaultSirenSounds;
+        
+        // Deallocates all created soundset structs
+        unsafe
+        {
+            foreach (var soundSet in SoundSet.SoundSets)
+                if(!soundSet.Vanilla) Manager.Destroy(soundSet.SoundSetStruct);    
+        }
+
+        // Removes blip patch
+        if (BlipPatch.Patched)
+            BlipPatch.Remove();
+        
+        $"====== Unloaded SLAPI v{Assembly.GetExecutingAssembly().GetName().Version} ======".ToLog();
     }
 }

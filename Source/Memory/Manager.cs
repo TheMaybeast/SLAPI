@@ -13,9 +13,7 @@ public static class Manager
     {
         var tempStruct = new T();
         var ptr = Marshal.AllocHGlobal(Marshal.SizeOf(tempStruct));
-#if DEBUG
-        $"Allocated {typeof(T).Name} at {(ulong)ptr:X}".ToLog();
-#endif
+        $"Allocated {typeof(T).Name} @ {(ulong)ptr:X}".ToLog();
         Marshal.StructureToPtr(tempStruct, ptr, false);
         AllocatedMemory.Add(ptr);
         return (T*)ptr;
@@ -27,8 +25,6 @@ public static class Manager
         if (!AllocatedMemory.Contains(ptr)) return;
         Marshal.FreeHGlobal(ptr);
         AllocatedMemory.Remove(ptr);
-#if DEBUG
-        $"Freed {typeof(T).Name} at {(ulong)ptr:X}".ToLog();
-#endif
+        $"Freed {typeof(T).Name} @ {(ulong)ptr:X}".ToLog();
     }
 }

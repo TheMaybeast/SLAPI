@@ -16,62 +16,48 @@ internal static class GameOffsets
 
     public static bool Init()
     {
-#if DEBUG
         "Memory Offsets:".ToLog();
-#endif
 
-        var address = Game.FindPattern("48 8B 8B ?? ?? 00 00 E8 ?? ?? ?? ?? 48 8B 8B 70 13 00 00");
+        var address = Game.FindPattern("48 8B 8B ?? ?? 00 00 E8 ?? ?? ?? FF 48 8B 8B ?? ?? 00 00 48 85 C9 74 08");
         if (AssertAddress(address, nameof(CVehicle_AudVehicleAudioEntity)))
         {
             CVehicle_AudVehicleAudioEntity = Marshal.ReadInt32(address + 3);
-#if DEBUG
             $"  CVehicle_AudVehicleAudioEntity = {CVehicle_AudVehicleAudioEntity}".ToLog();
-#endif
         }
 
         address = Game.FindPattern("44 88 A7 ?? ?? 00 00 44 88 AF ?? ?? 00 00 EB 07");
         if (AssertAddress(address, nameof(CVehicle_SequentialSirenPressesOffset)))
         {
             CVehicle_SequentialSirenPressesOffset = Marshal.ReadInt32(address + 3);
-#if DEBUG
             $"  CVehicle_SequentialSirenPressesOffset = {CVehicle_SequentialSirenPressesOffset}".ToLog();
-#endif
         }
 
         address = Game.FindPattern("C7 87 ?? ?? 00 00 02 00 00 00 E9 26 FE FF FF");
         if (AssertAddress(address, nameof(audVehicleAudioEntity_SirenStateOffset)))
         {
             audVehicleAudioEntity_SirenStateOffset = Marshal.ReadInt32(address + 2);
-#if DEBUG
             $"  audVehicleAudioEntity_SirenStateOffset = {audVehicleAudioEntity_SirenStateOffset}".ToLog();
-#endif
         }
 
         address = Game.FindPattern("81 BF ?? ?? 00 00 5E 01 00");
         if (AssertAddress(address, nameof(audVehicleAudioEntity_SirenTimeOffset)))
         {
             audVehicleAudioEntity_SirenTimeOffset = Marshal.ReadInt32(address + 2);
-#if DEBUG
             $"  audVehicleAudioEntity_SirenTimeOffset = {audVehicleAudioEntity_SirenTimeOffset}".ToLog();
-#endif
         }
 
         address = Game.FindPattern("89 87 ?? ?? 00 00 E9 F4 03 00 00");
         if (AssertAddress(address, nameof(audVehicleAudioEntity_LastSirenChangeTimeOffset)))
         {
             audVehicleAudioEntity_LastSirenChangeTimeOffset = Marshal.ReadInt32(address + 2);
-#if DEBUG
             $"  audVehicleAudioEntity_LastSirenChangeTimeOffset = {audVehicleAudioEntity_LastSirenChangeTimeOffset}".ToLog();
-#endif
         }
 
         address = Game.FindPattern("75 6D 48 8D B1 ?? ?? 00 00");
         if (AssertAddress(address, nameof(audVehicleAudioEntity_SirenSoundsOffset)))
         {
             audVehicleAudioEntity_SirenSoundsOffset = Marshal.ReadInt32(address + 5);
-#if DEBUG
             $"  audVehicleAudioEntity_SirenSoundsOffset = {audVehicleAudioEntity_SirenSoundsOffset}".ToLog();
-#endif
         }
 
         return !_anyAssertFailed;
@@ -82,7 +68,7 @@ internal static class GameOffsets
     {
         if (address != IntPtr.Zero) return true;
 
-        $"ERROR: Incompatible game version, couldn't find {name} instance.".ToLog();
+        $"ERROR: Incompatible game version, couldn't find {name} instance.".ToLog(LogLevel.ERROR);
         _anyAssertFailed = true;
         return false;
     }

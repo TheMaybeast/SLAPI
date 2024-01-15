@@ -3,6 +3,7 @@ using Rage.Attributes;
 using Rage.Native;
 using SLAPI;
 using SLAPI.Memory;
+using SLAPI.Utils;
 
 [assembly: Plugin("SLAPI Example", PrefersSingleInstance = true, ShouldTickInPauseMenu = false)]
 namespace APIExample;
@@ -12,6 +13,7 @@ public class EntryPoint
     public static void Main()
     {
         _ = new SLAPIMain();
+        SLVehicle.SirenBlipOnFastToggle = false;
 
         while (true)
         {
@@ -20,9 +22,11 @@ public class EntryPoint
             var veh = Game.LocalPlayer.Character.CurrentVehicle;
             if (!veh || veh.IsDead || !veh.HasSiren) continue;
 
-            var hornString = Functions.GetHornStatus(veh) ? "~g~Enabled" : "~r~Disabled";
+            var slVehicle = veh.GetSLVehicle();
 
-            var sirenState = Functions.GetSirenState(veh);
+            var hornString = slVehicle.HornStatus ? "~g~Enabled" : "~r~Disabled";
+
+            var sirenState = slVehicle.SirenState;
             var sirenString = sirenState switch
             {
                 eSirenState.OFF => "~r~Off",
@@ -33,7 +37,7 @@ public class EntryPoint
             };
 
             DisplayHelp(
-                $"Horn: {hornString}\n~w~State: {sirenString}\n~w~Time: {Functions.GetSirenTime(veh)}\n~w~LT Time: {Functions.GetSirenLastChangeTime(veh)}\n~w~SoundSet: {Functions.GetVehicleSoundSet(veh).NameHash}");
+                $"Horn: {hornString}\n~w~State: {sirenString}\n~w~Time: {slVehicle.SirenTime}\n~w~LT Time: {slVehicle.SirenLastChangeTime}\n~w~SoundSet: {slVehicle.SirenSounds.NameHash}");
         }
     }
 
@@ -45,18 +49,16 @@ public class EntryPoint
     }
 
     [ConsoleCommand]
-    public static void SetVehicleSoundSet(string soundSetName) =>
-        Functions.SetVehicleSoundSet(Game.LocalPlayer.Character.CurrentVehicle, soundSetName);
+    public static void SetVehicleSoundSet(string soundSetName)
+    {
+        var slVehicle = Game.LocalPlayer.Character.CurrentVehicle.GetSLVehicle();
+        slVehicle.SirenSounds = SoundSet.Get(soundSetName);
+    }
 
     [ConsoleCommand]
     public static void DumpVehicleSoundSet() =>
-        Functions.GetVehicleSoundSet(Game.LocalPlayer.Character.CurrentVehicle).DumpToLog(true);
+        Game.LocalPlayer.Character.CurrentVehicle.GetSLVehicle().DefaultSirenSounds.Dump(true);
 
     [ConsoleCommand]
-    public static void GetSound(string scriptName) => Game.Console.Print(
-        $"Sound {scriptName}: {Functions.GetVehicleSoundSet(Game.LocalPlayer.Character.CurrentVehicle).GetSound(scriptName)}");
-
-    [ConsoleCommand]
-    public static void SetSound(string scriptName, uint metadataRef) => Functions
-        .GetVehicleSoundSet(Game.LocalPlayer.Character.CurrentVehicle).SetSound(scriptName, metadataRef);
+    public static void DumpSoundSet(string soundSetName) => SoundSet.Get(soundSetName)?.Dump(true);
 }

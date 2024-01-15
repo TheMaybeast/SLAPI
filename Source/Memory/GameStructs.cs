@@ -39,14 +39,14 @@ internal unsafe struct TSoundsRaw
 }
 
 [StructLayout(LayoutKind.Explicit, Pack = 1)]
-internal struct SoundSet
+internal struct SoundSetStruct
 {
     [FieldOffset(0)] public byte Class;
     [FieldOffset(1)] public uint Flags;
     [FieldOffset(5)] public uint SoundCount;
     [FieldOffset(9)] public TSoundsRaw Sounds;
 
-    public SoundSet()
+    public SoundSetStruct()
     {
         Class = 32;
         Flags = 0xAAAAAAAA;
@@ -107,20 +107,51 @@ internal struct SoundSet
         };
     }
 
-    public unsafe void Copy(SoundSet* source)
+    public unsafe void Copy(SoundSetStruct* source)
     {
-        fixed (SoundSet* self = &this)
+        fixed (SoundSetStruct* self = &this)
         {
             var size = Marshal.SizeOf(this);
             Buffer.MemoryCopy(source, self, size, size);
         }
     }
+
+    public uint GetSound(uint scriptNameHash)
+    {
+        for (var i = 0; i < SoundCount; i++)
+        {
+            if (Sounds[i].Name == scriptNameHash)
+                return Sounds[i].MetadataRef;
+        }
+
+        return 0;
+    }
+    public uint GetSound(string scriptName) => GetSound(Game.GetHashKey(scriptName));
+    
+    public bool SetSound(uint scriptNameHash, uint soundMetadataRef)
+    {
+        for (var i = 0; i < SoundCount; i++)
+        {
+            if (Sounds[i].Name == scriptNameHash)
+            {
+                Sounds[i] = new TSounds()
+                {
+                    Name = scriptNameHash,
+                    MetadataRef = soundMetadataRef
+                };
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public bool SetSound(string scriptName, uint soundMetadataRef) => SetSound(Game.GetHashKey(scriptName), soundMetadataRef);
 }
 
 [StructLayout(LayoutKind.Sequential)]
 internal unsafe struct audSoundSet
 {
-    public SoundSet* Data;
+    public SoundSetStruct* Data;
     public uint NameHash;
 
     public void Init(uint soundSetNameHash)
