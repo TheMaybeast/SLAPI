@@ -24,7 +24,7 @@ internal static class BlipPatch
                 var addr = Game.FindPattern(Pattern);
                 if (addr == IntPtr.Zero)
                 {
-                    "  Failed to apply patch: Location not found".ToLog(LogLevel.ERROR);
+                    "  Failed to apply patch: Location not found.".ToLog(LogLevel.ERROR);
                     return false;
                 }
                 $"  Located @ {(long)addr:X}".ToLog();
@@ -40,7 +40,7 @@ internal static class BlipPatch
         }
         catch
         {
-            "  Failed to apply patch: Unknown error".ToLog(LogLevel.ERROR);
+            "  Failed to apply patch: Unknown error.".ToLog(LogLevel.ERROR);
             return false;
         }
     }
@@ -54,12 +54,12 @@ internal static class BlipPatch
             Marshal.WriteByte(_location, Offset, 0x80);
             $"  New {(long)Marshal.ReadByte(_location, Offset):X}".ToLog();
             Patched = false;
-            "   Removed patch successfully".ToLog();
+            "  Removed patch successfully!".ToLog();
             return true;
         }
         catch
         {
-            "   Failed to remove patch: Unknown error".ToLog(LogLevel.ERROR);
+            "  Failed to remove patch: Unknown error.".ToLog(LogLevel.ERROR);
             return false;
         }
     }
