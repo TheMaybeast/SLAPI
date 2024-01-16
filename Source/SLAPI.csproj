@@ -47,6 +47,9 @@
   <ItemGroup>
     <Compile Include="Memory\Manager.cs" />
     <Compile Include="Memory\Patches\BlipPatch.cs" />
+    <Compile Include="Sirens.cs" />
+    <Compile Include="Sounds.cs" />
+    <Compile Include="Utils\KnownHashes.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="SLAPIMain.cs" />
     <Compile Include="Memory\GameFunctions.cs" />
@@ -54,7 +57,7 @@
     <Compile Include="Memory\GameStructs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\VehicleExtensions.cs" />
-    <Compile Include="Wrappers.cs" />
+    <Compile Include="SLVehicle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

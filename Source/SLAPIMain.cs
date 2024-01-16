@@ -33,7 +33,7 @@ public class SLAPIMain
         unsafe
         {
             foreach (var soundSet in SoundSet.SoundSets)
-                if(!soundSet.Vanilla) Manager.Destroy(soundSet.SoundSetStruct);    
+                if(!soundSet.Vanilla) Manager.Destroy(soundSet.Sounds.SoundSetStruct);    
         }
 
         // Removes blip patch

@@ -52,7 +52,7 @@ public class EntryPoint
     public static void SetVehicleSoundSet(string soundSetName)
     {
         var slVehicle = Game.LocalPlayer.Character.CurrentVehicle.GetSLVehicle();
-        slVehicle.SirenSounds = SoundSet.Get(soundSetName);
+        slVehicle.SirenSounds = SoundSet.Get(soundSetName) as SirenSoundSet;
     }
 
     [ConsoleCommand]
