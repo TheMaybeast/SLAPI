@@ -48,6 +48,7 @@
     <Compile Include="Lights\SirenInstance.cs" />
     <Compile Include="Memory\Manager.cs" />
     <Compile Include="Memory\Patches\BlipPatch.cs" />
+    <Compile Include="Utils\CachedGameTime.cs" />
     <Compile Include="Utils\KnownHashes.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="SLAPIMain.cs" />
