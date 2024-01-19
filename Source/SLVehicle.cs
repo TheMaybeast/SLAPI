@@ -1,28 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Rage;
+using SLAPI.Lights;
 using SLAPI.Memory;
-using SLAPI.Memory.Patches;
 using SLAPI.Utils;
 
 namespace SLAPI;
 
-public class SLVehicle
+public class SoundInstance
 {
-    internal static readonly Dictionary<Vehicle, SLVehicle> SLVehicles = new();
-    
     private Vehicle _vehicle;
+
+    internal SoundInstance(Vehicle vehicle)
+    {
+        _vehicle = vehicle;
+
+        unsafe
+        {
+            var ptr = _vehicle.GetSirenSoundSetPtr();
+            DefaultSirenSounds = SoundSet.Get(ptr->NameHash);
+        }
+    }
     
-    // SoundSet
-    public SirenSoundSet DefaultSirenSounds { get; private set; }
-    public SirenSoundSet SirenSounds
+    // Siren SoundSets
+    public SoundSet DefaultSirenSounds { get; private set; }
+    public SoundSet SirenSounds
     {
         get
         {
             unsafe
             {
                 var ptr = _vehicle.GetSirenSoundSetPtr();
-                return SoundSet.Get(ptr->NameHash) as SirenSoundSet;
+                return SoundSet.Get(ptr->NameHash);
             }
         }
         set
@@ -35,20 +44,7 @@ public class SLVehicle
             }
         }
     }
-
-    // Siren Blip on Fast Toggle
-    public static bool SirenBlipOnFastToggle
-    {
-        get => !BlipPatch.Patched;
-        set
-        {
-            if (!value)
-                BlipPatch.Patch();
-            else
-                BlipPatch.Remove();
-        } 
-    }
-
+    
     // Siren State
     public eSirenState SirenState
     {
@@ -106,6 +102,28 @@ public class SLVehicle
     
     // Horn Status
     public bool HornStatus => GameFunctions.IsHornOn(_vehicle.MemoryAddress);
+}
+
+public class LightInstance
+{
+    private Vehicle _vehicle;
+
+    public SirenInstance SirenInstance => new(_vehicle);
+
+    internal LightInstance(Vehicle vehicle)
+    {
+        _vehicle = vehicle;
+    }
+}
+
+public class SLVehicle
+{
+    internal static readonly Dictionary<Vehicle, SLVehicle> SLVehicles = new();
+    
+    private Vehicle _vehicle;
+
+    public SoundInstance Sounds;
+    public LightInstance Lights;
 
     public static SLVehicle Get(Vehicle vehicle)
     {
@@ -114,17 +132,12 @@ public class SLVehicle
             return slVehicle;
         
         // Creates/returns new SLVehicle
-        unsafe
+        slVehicle = new SLVehicle()
         {
-            var ptr = vehicle.GetSirenSoundSetPtr();
-            var defaultSoundSet = SoundSet.Get(ptr->NameHash) as SirenSoundSet;
-            
-            slVehicle = new SLVehicle()
-            {
-                _vehicle = vehicle,
-                DefaultSirenSounds = defaultSoundSet
-            };
-        }
+            _vehicle = vehicle,
+            Lights = new LightInstance(vehicle),
+            Sounds = new SoundInstance(vehicle),
+        };
         
         SLVehicles[vehicle] = slVehicle;
         return slVehicle;

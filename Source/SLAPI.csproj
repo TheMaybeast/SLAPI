@@ -45,10 +45,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lights\SirenSettings.cs" />
     <Compile Include="Memory\Manager.cs" />
     <Compile Include="Memory\Patches\BlipPatch.cs" />
-    <Compile Include="Sirens.cs" />
-    <Compile Include="Sounds.cs" />
     <Compile Include="Utils\KnownHashes.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="SLAPIMain.cs" />
@@ -56,6 +55,7 @@
     <Compile Include="Memory\GameOffsets.cs" />
     <Compile Include="Memory\GameStructs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Sounds.cs" />
     <Compile Include="Utils\VehicleExtensions.cs" />
     <Compile Include="SLVehicle.cs" />
   </ItemGroup>

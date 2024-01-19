@@ -171,3 +171,23 @@ public enum eSirenState
     FAST = 2,
     WARNING = 3
 }
+
+[StructLayout(LayoutKind.Sequential)]
+internal unsafe struct SirenInstanceData
+{
+    public uint SirenOnTime;
+    public float SirenTimeDelta;
+    public int LastSirenBeat;
+    
+    public fixed uint LastSirenRotationBit[20];
+    public fixed uint SirenRotationStart[20];
+    public fixed uint LastSirenFlashBit[20];
+    public fixed uint SirenFlashStart[20];
+    public fixed uint LastSirenLightBit[4];
+    public fixed uint SirenLightStart[4];
+    public fixed float LightIntensity[4];
+
+    public uint SirenRotating;
+    public uint SirenFlashing;
+    public uint SirenLightOn;
+}

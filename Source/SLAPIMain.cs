@@ -22,12 +22,24 @@ public class SLAPIMain
 
         _hasInitialized = true;
     }
+    
+    public bool SirenBlipPatch
+    {
+        get => BlipPatch.Patched;
+        set
+        {
+            if (value && !BlipPatch.Patched)
+                BlipPatch.Patch();
+            else if (BlipPatch.Patched)
+                BlipPatch.Remove();
+        } 
+    }
 
     ~SLAPIMain()
     {
         // Resets all managed vehicles to default siren sounds
         foreach (var slVehicle in SLVehicle.SLVehicles.Values)
-            slVehicle.SirenSounds = slVehicle.DefaultSirenSounds;
+            slVehicle.Sounds.SirenSounds = slVehicle.Sounds.DefaultSirenSounds;
         
         // Deallocates all created soundset structs
         unsafe

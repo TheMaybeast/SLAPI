@@ -11,11 +11,13 @@ namespace SLAPI;
 public unsafe class Sounds
 {
     // Pointer to SoundSetStruct relating to this SoundSet
-    internal SoundSetStruct* SoundSetStruct;
+    internal readonly SoundSetStruct* SoundSetStruct;
+    internal readonly bool Vanilla;
 
-    internal Sounds(SoundSetStruct* soundSetStruct)
+    internal Sounds(SoundSetStruct* soundSetStruct, bool vanilla = false)
     {
         SoundSetStruct = soundSetStruct;
+        Vanilla = vanilla;
     }
     
     // Amount of sounds
@@ -25,13 +27,26 @@ public unsafe class Sounds
     public uint this[uint scriptNameHash]
     {
         get => SoundSetStruct->GetSound(scriptNameHash);
-        set => SoundSetStruct->SetSound(scriptNameHash, value);
+        set
+        {
+            if (Vanilla)
+            {
+                "Attempting to edit a vanilla SoundSet".ToLog(LogLevel.ERROR);
+                return;
+            }
+            SoundSetStruct->SetSound(scriptNameHash, value);   
+        }
     }
     public (uint scriptName, uint metadataRef) this[int index]
     {
         get => (SoundSetStruct->Sounds[index].Name, SoundSetStruct->Sounds[index].MetadataRef);
         set
         {
+            if (Vanilla)
+            {
+                "Attempting to edit a vanilla SoundSet".ToLog(LogLevel.ERROR);
+                return;
+            }
             SoundSetStruct->Sounds[index] = new TSounds()
             {
                 Name = value.metadataRef,
@@ -44,13 +59,17 @@ public unsafe class Sounds
 public unsafe class SoundSet
 {
     // Stores all SoundSets obtained/created with SLAPI
-    internal static readonly List<SoundSet> SoundSets = new();
+    public static readonly List<SoundSet> SoundSets = new();
+
+    public bool Vanilla
+    {
+        get => Sounds.Vanilla;
+    }
     
-    public bool Vanilla { get; private set; }
     public uint NameHash { get; set; }
     public Sounds Sounds;
 
-    internal SoundSet() {}
+    private SoundSet() {}
 
     public SoundSet Clone(string name = null)
     {
@@ -64,8 +83,8 @@ public unsafe class SoundSet
         // Creates new empty SoundSet
         var soundSet = new SoundSet()
         {
+            Sounds = new Sounds(soundSetPtr),
             NameHash = Game.GetHashKey(name ?? $"new-soundset-{Game.TickCount}"),
-            Sounds = new Sounds(soundSetPtr)
         };
         SoundSets.Add(soundSet);
         return soundSet;
@@ -73,11 +92,11 @@ public unsafe class SoundSet
 
     public void Dump(bool toConsole)
     {
-        $"SoundSet: {NameHash} ({NameHash.Parse()})".ToLog(toConsole: toConsole);
+        $"SoundSet: {NameHash} ({NameHash.HashParse(HashType.SoundSet)})".ToLog(toConsole: toConsole);
         $"Num of Sounds: {Sounds.Count}".ToLog(toConsole: toConsole);
 
         for (var i = 0; i < Sounds.Count; i++)
-            $"  #{i} {Sounds[i].scriptName.Parse()}: {Sounds[i].metadataRef:X}".ToLog(toConsole: toConsole);
+            $"  #{i} {Sounds[i].scriptName.HashParse(HashType.ScriptName)}: {Sounds[i].metadataRef.HashParse(HashType.MetadataRef)}".ToLog(toConsole: toConsole);
     }
     
     // Gets new or existing instances
@@ -96,12 +115,11 @@ public unsafe class SoundSet
         // Returns null if no existing SoundSet in game memory
         if ((IntPtr)soundSetPtr == IntPtr.Zero) return null;
 
-        // Creates new vanilla SoundSet and adds to list
+        // If existing in game memory, creates new SoundSet and adds to list
         soundSet = new SoundSet()
         {
+            Sounds = new Sounds(soundSetPtr, true),
             NameHash = hash,
-            Sounds = new Sounds(soundSetPtr),
-            Vanilla = true
         };
         SoundSets.Add(soundSet);
         return soundSet;
