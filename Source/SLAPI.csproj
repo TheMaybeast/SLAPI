@@ -45,7 +45,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lights\SirenSettings.cs" />
+    <Compile Include="Lights\SirenInstance.cs" />
     <Compile Include="Memory\Manager.cs" />
     <Compile Include="Memory\Patches\BlipPatch.cs" />
     <Compile Include="Utils\KnownHashes.cs" />
