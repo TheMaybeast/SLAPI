@@ -46,67 +46,6 @@ internal struct SoundSetStruct
     [FieldOffset(5)] public uint SoundCount;
     [FieldOffset(9)] public TSoundsRaw Sounds;
 
-    public SoundSetStruct()
-    {
-        Class = 32;
-        Flags = 0xAAAAAAAA;
-        SoundCount = 9;
-
-        Sounds = new TSoundsRaw
-        {
-            [0] = new TSounds
-            {
-                Name = 0x26D96F23,
-                MetadataRef = 0
-            },
-            [1] = new TSounds
-            {
-                Name = 0x3E34681F,
-                MetadataRef = 0
-            },
-            [2] = new TSounds
-            {
-                Name = 0x4DD32855,
-                MetadataRef = 0
-            },
-            [3] = new TSounds
-            {
-                Name = 0x5417639D,
-                MetadataRef = 0
-            },
-            [4] = new TSounds
-            {
-                Name = 0x64B8047E,
-                MetadataRef = 0
-            },
-            [5] = new TSounds
-            {
-                Name = 0xC4EE147F,
-                MetadataRef = 0
-            },
-            [6] = new TSounds
-            {
-                Name = 0xCB4A8157,
-                MetadataRef = 0
-            },
-            [7] = new TSounds
-            {
-                Name = 0xD91C6C0F,
-                MetadataRef = 0
-            },
-            [8] = new TSounds
-            {
-                Name = 0x26D96F23,
-                MetadataRef = 0
-            },
-            [9] = new TSounds
-            {
-                Name = 0xE91F183C,
-                MetadataRef = 0
-            }
-        };
-    }
-
     public unsafe void Copy(SoundSetStruct* source)
     {
         fixed (SoundSetStruct* self = &this)
